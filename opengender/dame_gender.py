@@ -89,7 +89,7 @@ class Gender(object):
         name = du.drop_accents(name)
         if force_whitespaces:
             name = du.force_whitespaces(name)
-        dicc_males = du.dicc_dataset("male")
+        dicc_males = du.dicc_dataset()
         path_males = dicc_males[dataset]
         file_males = open(path_males, "r")
         readerm = csv.reader(file_males, delimiter=",", quotechar="|")
@@ -99,7 +99,7 @@ class Gender(object):
                 males = row[1]
                 males = du.drop_dots(males)
 
-        dicc_females = du.dicc_dataset("female")
+        dicc_females = du.dicc_dataset()
         path_females = dicc_females[dataset]
         file_females = open(path_females, "r")
         readerf = csv.reader(file_females, delimiter=",", quotechar="|")
