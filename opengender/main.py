@@ -9,15 +9,8 @@ parser.add_argument("name", help="display the gender")
 parser.add_argument(
     "--ml",
     choices=[
-        "nltk",
         "svc",
-        "sgd",
-        "gaussianNB",
-        "multinomialNB",
-        "bernoulliNB",
         "forest",
-        "tree",
-        "mlp",
     ],
 )
 parser.add_argument(
@@ -349,46 +342,11 @@ else:
         args.ml = "nltk"
 
     if args.ml:
-        if args.ml == "nltk":
-            guess = s.guess(
-                args.name,
-                binary=True,
-                ml="nltk",
-                force_whitespaces=args.force_whitespaces,
-            )
-        if args.ml == "sgd":
-            guess = s.guess(
-                args.name,
-                binary=True,
-                ml="sgd",
-                force_whitespaces=args.force_whitespaces,
-            )
-        elif args.ml == "svc":
+        if args.ml == "svc":
             guess = s.guess(
                 args.name,
                 binary=True,
                 ml="svc",
-                force_whitespaces=args.force_whitespaces,
-            )
-        elif args.ml == "gaussianNB":
-            guess = s.guess(
-                args.name,
-                binary=True,
-                ml="gaussianNB",
-                force_whitespaces=args.force_whitespaces,
-            )
-        elif args.ml == "multinomialNB":
-            guess = s.guess(
-                args.name,
-                binary=True,
-                ml="multinomialNB",
-                force_whitespaces=args.force_whitespaces,
-            )
-        elif args.ml == "bernoulliNB":
-            guess = s.guess(
-                args.name,
-                binary=True,
-                ml="bernoulliNB",
                 force_whitespaces=args.force_whitespaces,
             )
         elif args.ml == "forest":
@@ -398,27 +356,7 @@ else:
                 ml="forest",
                 force_whitespaces=args.force_whitespaces,
             )
-        elif args.ml == "xgboost":
-            guess = s.guess(
-                args.name,
-                binary=True,
-                ml="xgboost",
-                force_whitespaces=args.force_whitespaces,
-            )
-        elif args.ml == "tree":
-            guess = s.guess(
-                args.name,
-                binary=True,
-                ml="tree",
-                force_whitespaces=args.force_whitespaces,
-            )
-        elif args.ml == "mlp":
-            guess = s.guess(
-                args.name,
-                binary=True,
-                ml="mlp",
-                force_whitespaces=args.force_whitespaces,
-            )
+        
         if guess == 1:
             sex = "male"
         elif guess == 0:
