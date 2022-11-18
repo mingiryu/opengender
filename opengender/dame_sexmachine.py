@@ -92,7 +92,7 @@ class DameSexmachine(Gender):
         # TODO: ISO/IEC 5218 proposes a norm about coding gender:
         # ``0 as not know'',``1 as male'', ``2 as female''
         # and ``9 as not applicable''
-        dataset = kwargs.get("dataset", "us")
+        dataset = kwargs.get("dataset", "inter")
         guess = 2
         guess = super().guess(name, binary, dataset)
         vector = self.features_int(name)
