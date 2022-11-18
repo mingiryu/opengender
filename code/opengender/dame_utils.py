@@ -1,24 +1,25 @@
 import unicodedata
 
+from opengender.paths import INTERALL_PATH
 
-class DameUtils():
 
+class DameUtils:
     def dicc_dataset(self):
-        return {"inter": "files/names/names_inter/interall.csv"}                  
+        return {"inter": INTERALL_PATH}
 
     def drop_dots(self, s):
         # given s removes dots symbols in the string
         aux = ""
-        for c in unicodedata.normalize('NFD', str(s)):
-            if (c != '.'):
+        for c in unicodedata.normalize("NFD", str(s)):
+            if c != ".":
                 aux = aux + c
         return aux
 
     def force_whitespaces(self, s):
         # replace underscore, hyphens, ... by white spaces
         aux = ""
-        for c in unicodedata.normalize('NFD', str(s)):
-            if ((c == "_") or (c == '-')):
+        for c in unicodedata.normalize("NFD", str(s)):
+            if (c == "_") or (c == "-"):
                 aux = aux + " "
             else:
                 aux = aux + c
@@ -26,5 +27,10 @@ class DameUtils():
 
     def drop_accents(self, s):
         # given a string s delete accents
-        return ''.join((c for c in unicodedata.normalize('NFD', s)
-                        if unicodedata.category(c) != 'Mn'))
+        return "".join(
+            (
+                c
+                for c in unicodedata.normalize("NFD", s)
+                if unicodedata.category(c) != "Mn"
+            )
+        )

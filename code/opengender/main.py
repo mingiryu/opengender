@@ -13,14 +13,7 @@ parser.add_argument(
         "forest",
     ],
 )
-parser.add_argument(
-    "--total",
-    default="inter",
-    choices=[
-        "namdict",
-        "inter",
-    ],
-)
+
 # More about iso codes on https://www.iso.org/obp/ui/
 # You can set alphabet with sufix:
 # So russian in latin alphabet would be ru_en
@@ -31,12 +24,14 @@ args = parser.parse_args()
 results = []
 
 s = DameSexmachine()
+
 n_males = s.name_frec(
     args.name, dataset=args.total, force_whitespaces=args.force_whitespaces
 )["males"]
 n_females = s.name_frec(
     args.name, dataset=args.total, force_whitespaces=args.force_whitespaces
 )["females"]
+
 if int(n_males) > int(n_females):
     print("%s's gender is male" % (str(args.name)))
     prob = int(n_males) / (int(n_males) + int(n_females))
