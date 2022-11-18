@@ -8,6 +8,7 @@ from sklearn.datasets import make_classification
 from sklearn import svm
 
 from opengender.dame_gender import Gender
+from opengender.paths import DATA_DIR, ALL_PATH
 
 
 class DameSexmachine(Gender):
@@ -48,24 +49,24 @@ class DameSexmachine(Gender):
 
     def svc(self):
         # Scikit svc classifier
-        X = np.array(self.features_list(path="files/names/all.csv"))
-        y = self.csv2gender_list(path="files/names/all.csv")
+        X = np.array(self.features_list(path=ALL_PATH))
+        y = self.csv2gender_list(path=ALL_PATH)
         clf = svm.SVC()
         clf.fit(X, y)
-        filename = "files/datamodels/svc_model.sav"
+        filename = DATA_DIR / "svc_model.sav"
         pickle.dump(clf, open(filename, "wb"))
         return clf
 
     def svc_load(self):
-        pkl_file = open("files/datamodels/svc_model.sav", "rb")
+        pkl_file = open(DATA_DIR / "svc_model.sav", "rb")
         clf = pickle.load(pkl_file)
         pkl_file.close()
         return clf
 
     def forest(self):
         # Scikit forest classifier
-        X = np.array(self.features_list(path="files/names/all.csv"))
-        y = np.array(self.csv2gender_list(path="files/names/all.csv"))
+        X = np.array(self.features_list(path=ALL_PATH))
+        y = np.array(self.csv2gender_list(path=ALL_PATH))
         X, y = make_classification(
             n_samples=7000,
             n_features=33,
@@ -76,12 +77,12 @@ class DameSexmachine(Gender):
         )
         rf = RandomForestRegressor(n_estimators=20, random_state=0)
         rf.fit(X, y)
-        filename = "files/datamodels/forest_model.sav"
+        filename = DATA_DIR / "forest_model.sav"
         pickle.dump(rf, open(filename, "wb"))
         return rf
 
     def forest_load(self):
-        pkl_file = open("files/datamodels/forest_model.sav", "rb")
+        pkl_file = open(DATA_DIR / "forest_model.sav", "rb")
         clf = pickle.load(pkl_file)
         pkl_file.close()
         return clf
@@ -121,4 +122,3 @@ class DameSexmachine(Gender):
                 elif guess == 2:
                     guess = "unknown"
         return guess
-

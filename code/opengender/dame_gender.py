@@ -3,6 +3,7 @@ import unidecode
 import configparser
 
 from opengender.dame_utils import DameUtils
+from opengender.paths import PARTIAL_PATH
 
 
 csv.field_size_limit(3000000)
@@ -68,7 +69,7 @@ class Gender(object):
             features_int["last_letter_o"] = 0
         return features_int
 
-    def features_list(self, path="files/names/partial.csv", sexdataset=""):
+    def features_list(self, path=PARTIAL_PATH, sexdataset=""):
         flist = []
         with open(path) as csvfile:
             sexreader = csv.reader(csvfile, delimiter=",", quotechar="|")
