@@ -1,38 +1,8 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-
-# Copyright (C) 2020  David Arroyo Menéndez (davidam@gmail.com)
-# This file is part of Damegender.
-
-# Author: David Arroyo Menéndez <davidam@gmail.com>
-# Maintainer: David Arroyo Menéndez <davidam@gmail.com>
-
-# This file is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3, or (at your option)
-# any later version.
-
-# This file is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with DameGender; see the file GPL.txt.  If not, write to
-# the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-# Boston, MA 02110-1301 USA,
-
-# DESCRIPTION:
-# Given a name give me gender
-
-
-from app.dame_gender import Gender
-from app.dame_sexmachine import DameSexmachine
-from app.dame_utils import DameUtils
-import sys
 import os
 import re
 import argparse
+
+from opengender.dame_sexmachine import DameSexmachine
 
 parser = argparse.ArgumentParser()
 parser.add_argument("name", help="display the gender")
@@ -57,7 +27,6 @@ args = parser.parse_args()
 results = []
 
 s = DameSexmachine()
-du = DameUtils()
 
 if (args.total == "namdict"):
     name = args.name.capitalize()
@@ -314,11 +283,6 @@ elif ((args.verbose) or (args.total == "all")):
           % (n_males, args.name))
     print("%s females for %s from international statistics"
           % (n_females, args.name))
-
-    guess = s.guess(args.name, binary=True, ml="nltk",
-                    force_whitespaces=args.force_whitespaces)
-    print("%s gender predicted with nltk is %s"
-          % (str(args.name), du.int2gender(guess)))
 
 else:
     s = DameSexmachine()

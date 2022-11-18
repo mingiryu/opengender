@@ -1,36 +1,9 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-# Copyright (C) 2020  David Arroyo Menéndez (davidam@gmail.com)
-# This file is part of Damegender.
-
-# Author: David Arroyo Menéndez <davidam@gmail.com>
-# Maintainer: David Arroyo Menéndez <davidam@gmail.com>
-
-# This file is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3, or (at your option)
-# any later version.
-
-# This file is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with DameGender; see the file GPL.txt.  If not, write to
-# the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-# Boston, MA 02110-1301 USA,
-
-
-from pprint import pprint
-import json
 import os
 import csv
 import nltk
-import re
-import unidecode
 import numpy as np
+import pickle
+
 from sklearn.naive_bayes import GaussianNB
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.naive_bayes import BernoulliNB
@@ -39,16 +12,10 @@ from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import RandomForestRegressor
 from sklearn import tree
 from sklearn.neural_network import MLPClassifier
-
-from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_classification
 # from xgboost import XGBClassifier
 from sklearn import svm
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix
-import pickle
 from app.dame_gender import Gender
-from app.dame_utils import DameUtils
 from app.dame_statistics import DameStatistics
 
 
