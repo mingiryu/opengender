@@ -16,16 +16,6 @@ class DameSexmachine(Gender):
         self.females = 0
         self.unknown = 0
 
-    def features(self, name):
-        # features method created to check the nltk classifier
-        features = {}
-        features["first_letter"] = name[0].lower()
-        features["last_letter"] = name[-1].lower()
-        for letter in "abcdefghijklmnopqrstuvwxyz":
-            features["count({})".format(letter)] = name.lower().count(letter)
-            features["has({})".format(letter)] = letter in name.lower()
-        return features
-
     def features_int(self, name):
         # features method created to check the scikit classifiers
         features_int = {}
