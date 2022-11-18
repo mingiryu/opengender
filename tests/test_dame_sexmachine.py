@@ -10,14 +10,6 @@ collections.Callable = collections.abc.Callable
 
 
 class TddInPythonExample(unittest.TestCase):
-    def test_sexmachine_features(self):
-        s = DameSexmachine()
-        f = s.features("David")
-        self.assertEqual(f["has(a)"], True)
-        self.assertEqual(f["count(i)"], 1)
-        self.assertEqual(f["count(v)"], 1)
-        self.assertEqual(f["last_letter"], "d")
-        self.assertEqual(f["first_letter"], "d")
 
     def test_dame_sexmachine_features_int(self):
         s = DameSexmachine()

@@ -122,17 +122,3 @@ class DameSexmachine(Gender):
                     guess = "unknown"
         return guess
 
-    def guess_list(
-        self, path="files/names/partial.csv", binary=False, ml="nltk", *args, **kwargs
-    ):
-        # guess list method
-        dataset = kwargs.get("dataset", "us")
-        slist = []
-        with open(path) as csvfile:
-            sexreader = csv.reader(csvfile, delimiter=",", quotechar="|")
-            next(sexreader, None)
-            for row in sexreader:
-                name = row[0].title()
-                name = name.replace('"', "")
-                slist.append(self.guess(name, binary, ml=ml, dataset=dataset))
-        return slist
