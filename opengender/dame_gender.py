@@ -2,6 +2,8 @@ import csv
 import unidecode
 import configparser
 
+from opengender.dame_utils import DameUtils
+
 
 csv.field_size_limit(3000000)
 
