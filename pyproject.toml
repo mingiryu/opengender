@@ -7,7 +7,6 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-nltk = "^3.7"
 sklearn = "^0.0.post1"
 
 
