@@ -20,10 +20,3 @@ class TddInPythonExample(unittest.TestCase):
     def test_drop_accents(self):
         u = DameUtils()
         self.assertEqual("Ines", u.drop_accents("Inés"))
-
-    def test_dicc_dataset(self):
-        du = DameUtils()
-        dicc = du.dicc_dataset("male")
-        self.assertEqual(dicc["at"], "files/names/names_at/atmales.csv")
-        dicc = du.dicc_dataset("female")
-        self.assertEqual(dicc["at"], "files/names/names_at/atfemales.csv")

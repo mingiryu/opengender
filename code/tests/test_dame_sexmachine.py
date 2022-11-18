@@ -3,14 +3,14 @@ import numpy as np
 import os.path
 import collections
 
-from dame_sexmachine import DameSexmachine
+from opengender.dame_sexmachine import DameSexmachine
+from opengender.paths import DATA_DIR, ALL_PATH
 
 
 collections.Callable = collections.abc.Callable
 
 
 class TddInPythonExample(unittest.TestCase):
-
     def test_dame_sexmachine_features_int(self):
         s = DameSexmachine()
         f = s.features_int("David")
@@ -60,11 +60,11 @@ class TddInPythonExample(unittest.TestCase):
 
     def test_sexmachine_features_list_all(self):
         s = DameSexmachine()
-        fl = s.features_list(path="files/names/all.csv")
+        fl = s.features_list(path=ALL_PATH)
         self.assertTrue(len(fl) > 1000)
 
     def test_sexmachine_forest(self):
-        self.assertTrue(os.path.isfile("files/datamodels/forest_model.sav"))
+        self.assertTrue(os.path.isfile(DATA_DIR / "forest_model.sav"))
 
     def test_sexmachine_forest_load(self):
         s = DameSexmachine()
