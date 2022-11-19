@@ -50,7 +50,7 @@ class DameSexmachine:
             features_int["last_letter_a"] = 0
         return features_int
 
-    def features_list(self, path=PARTIAL_PATH, sexdataset=""):
+    def features_list(self, path=ALL_PATH):
         flist = []
         with open(path) as csvfile:
             sexreader = csv.reader(csvfile, delimiter=",", quotechar="|")
