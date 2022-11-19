@@ -7,7 +7,7 @@ from sklearn.datasets import make_classification
 
 from sklearn import svm
 
-from opengender.paths import DATA_DIR, ALL_PATH, PARTIAL_PATH
+from opengender.paths import DATA_DIR, ALL_PATH
 from opengender.utils import force_whitespaces, drop_accents, drop_dots
 
 
@@ -15,10 +15,6 @@ csv.field_size_limit(3000000)
 
 
 class DameSexmachine:
-    def __init__(self):
-        self.males = 0
-        self.females = 0
-        self.unknown = 0
 
     def features_int(self, name):
         # features method created to check the scikit classifiers
@@ -66,7 +62,6 @@ class DameSexmachine:
         # TODO: ISO/IEC 5218 proposes a norm about coding gender:
         # ``0 as not know'',``1 as male'', ``2 as female''
         # and ``9 as not applicable''
-        header = kwargs.get("header", True)
         gender_column = kwargs.get("gender_column", 4)
         gender_f_chars = kwargs.get("gender_f_chars", "f")
         gender_m_chars = kwargs.get("gender_m_chars", "m")
@@ -74,11 +69,7 @@ class DameSexmachine:
         glist = []
         with open(path) as csvfile:
             sexreader = csv.reader(csvfile, delimiter=delimiter, quotechar='"')
-            if header:
-                next(sexreader, None)
-            count_females = 0
-            count_males = 0
-            count_unknown = 0
+            next(sexreader, None)
             gender = ""
             for row in sexreader:
                 try:
@@ -92,17 +83,12 @@ class DameSexmachine:
                     # os.kill(os.getpid(), signal.SIGUSR1)
                 if gender == gender_f_chars:
                     g = 0
-                    count_females = count_females + 1
                 elif gender == gender_m_chars:
                     g = 1
-                    count_males = count_males + 1
                 else:
                     g = 2
-                    count_unknown = count_unknown + 1
                 glist.append(g)
-        self.females = count_females
-        self.males = count_males
-        self.unknown = count_unknown
+
         return glist
 
     def svc(self):
