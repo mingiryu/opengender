@@ -1,6 +1,6 @@
 import unittest
 
-from opengender.dame_utils import drop_accents, drop_dots, force_whitespaces
+from opengender.utils import drop_accents, drop_dots, force_whitespaces
 
 
 class TddInPythonExample(unittest.TestCase):
