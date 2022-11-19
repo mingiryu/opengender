@@ -1,4 +1,5 @@
 import pandas as pd
+import pickle
 
 from typing import Optional
 from tqdm import tqdm
@@ -34,4 +35,26 @@ class Retriever:
         try:
             return self.df.loc[self.normalize(name)].to_dict()
         except KeyError:
+            return dict(gender="unknown", proba=1.0)
+
+
+class Classifier:
+    def __init__(self, model):
+        self.model = model
+
+    @classmethod
+    def load_model(cls, path: str):
+        with open(path, "rb") as fh:
+            model = pickle.load(fh)
+            return cls(model)
+
+    def normalize(self, text: Optional[str]):
+        if text:
+            # XXX: Add comprehensive text normalization
+            return text.upper()
+
+    def predict(self, name: Optional[str]):
+        if name := self.normalize(name):
+            return self.model.predict(name)
+        else:
             return dict(gender="unknown", proba=1.0)
