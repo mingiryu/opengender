@@ -1,5 +1,4 @@
 import csv
-import unidecode
 import configparser
 
 from opengender.dame_utils import DameUtils
@@ -84,7 +83,7 @@ class Gender(object):
 
     def name_frec(self, name, *args, **kwargs):
         # guess list method
-        dataset = kwargs.get("dataset", "us")
+        dataset = kwargs.get("dataset", "inter")
         force_whitespaces = kwargs.get("force_whitespaces", False)
         du = DameUtils()
         name = du.drop_accents(name)
@@ -92,9 +91,11 @@ class Gender(object):
             name = du.force_whitespaces(name)
         dicc_males = du.dicc_dataset()
         path_males = dicc_males[dataset]
-        file_males = open(path_males, "r")
-        readerm = csv.reader(file_males, delimiter=",", quotechar="|")
+
+        with open(path_males, "r") as file_males:
+            readerm = csv.reader(file_males, delimiter=",", quotechar="|")
         males = 0
+
         for row in readerm:
             if (len(row) > 1) and (row[0].lower() == name.lower()):
                 males = row[1]
@@ -102,9 +103,11 @@ class Gender(object):
 
         dicc_females = du.dicc_dataset()
         path_females = dicc_females[dataset]
-        file_females = open(path_females, "r")
-        readerf = csv.reader(file_females, delimiter=",", quotechar="|")
+
+        with open(path_females, "r") as file_females:
+            readerf = csv.reader(file_females, delimiter=",", quotechar="|")
         females = 0
+
         for row in readerf:
             if (len(row) > 1) and (row[0].lower() == name.lower()):
                 females = row[1]
@@ -112,51 +115,6 @@ class Gender(object):
         dicc = {"females": females, "males": males}
 
         return dicc
-
-    # GUESS #
-
-    def guess(self, name, binary=False, dataset="us", *args, **kwargs):
-        # guess method to check names dictionary
-        nonamerange = kwargs.get("nonamerange", 0)
-        force_whitespaces = kwargs.get("force_whitespaces", False)
-        guess = ""
-        name = unidecode.unidecode(name).title()
-        name.replace(name, "")
-        dicc = self.name_frec(
-            name, dataset=dataset, force_whitespaces=force_whitespaces
-        )
-        m = int(dicc["males"])
-        f = int(dicc["females"])
-        # nonamerange must be greater than 500
-        # otherwise where are considering that
-        # name is a nick
-        if (m > nonamerange) or (f > nonamerange):
-            if (m == 0) and (f == 0):
-                if binary:
-                    guess = 2
-                else:
-                    guess = "unknown"
-            elif m > f:
-                if binary:
-                    guess = 1
-                else:
-                    guess = "male"
-            elif f > m:
-                if binary:
-                    guess = 0
-                else:
-                    guess = "female"
-            else:
-                if binary:
-                    guess = 2
-                else:
-                    guess = "unknown"
-        else:
-            if binary:
-                guess = 2
-            else:
-                guess = "unknown"
-        return guess
 
     def csv2gender_list(self, path, *args, **kwargs):
         # generating a list of 0, 1, 2 as females, males and unknows
