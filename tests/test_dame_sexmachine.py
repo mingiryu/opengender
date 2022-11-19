@@ -4,7 +4,7 @@ import os.path
 import collections
 
 from opengender.dame_sexmachine import DameSexmachine
-from opengender.paths import DATA_DIR, ALL_PATH
+from opengender.paths import DATA_DIR, ALL_PATH, PARTIAL_PATH
 
 
 collections.Callable = collections.abc.Callable
@@ -62,6 +62,17 @@ class TddInPythonExample(unittest.TestCase):
         s = DameSexmachine()
         fl = s.features_list(path=ALL_PATH)
         self.assertTrue(len(fl) > 1000)
+
+    def test_dame_gender_csv2gender_list(self):
+        s = DameSexmachine()
+        gl = s.csv2gender_list(path=PARTIAL_PATH)
+        self.assertEqual(
+            gl, [1, 1, 1, 1, 2, 1, 0, 0, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1]
+        )
+        self.assertEqual(len(gl), 21)
+        self.assertEqual(s.females, 3)
+        self.assertEqual(s.males, 16)
+        self.assertEqual(s.unknown, 2)
 
     def test_sexmachine_forest(self):
         self.assertTrue(os.path.isfile(DATA_DIR / "forest_model.sav"))

@@ -25,24 +25,6 @@ results = []
 
 s = DameSexmachine()
 
-n_males = s.name_frec(
-    args.name, dataset=args.total, force_whitespaces=args.force_whitespaces
-)["males"]
-n_females = s.name_frec(
-    args.name, dataset=args.total, force_whitespaces=args.force_whitespaces
-)["females"]
-
-if int(n_males) > int(n_females):
-    print("%s's gender is male" % (str(args.name)))
-    prob = int(n_males) / (int(n_males) + int(n_females))
-    print("probability: %s" % str(prob))
-elif int(n_males) < int(n_females):
-    print("%s's gender is female" % (str(args.name)))
-    prob = int(n_females) / (int(n_females) + int(n_males))
-    print("probability: %s" % str(prob))
-elif (int(n_males) == 0) and (int(n_females) == 0):
-    args.ml = "nltk"
-
 if args.ml:
     if args.ml == "svc":
         guess = s.guess(

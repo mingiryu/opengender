@@ -7,11 +7,13 @@ from sklearn.datasets import make_classification
 
 from sklearn import svm
 
-from opengender.dame_gender import Gender
-from opengender.paths import DATA_DIR, ALL_PATH
+from opengender.paths import DATA_DIR, ALL_PATH, PARTIAL_PATH
 
 
-class DameSexmachine(Gender):
+csv.field_size_limit(3000000)
+
+
+class DameSexmachine:
     def __init__(self):
         self.males = 0
         self.females = 0
@@ -46,6 +48,61 @@ class DameSexmachine(Gender):
         else:
             features_int["last_letter_a"] = 0
         return features_int
+
+    def features_list(self, path=PARTIAL_PATH, sexdataset=""):
+        flist = []
+        with open(path) as csvfile:
+            sexreader = csv.reader(csvfile, delimiter=",", quotechar="|")
+            next(sexreader, None)
+            for row in sexreader:
+                name = row[0].title()
+                name = name.replace('"', "")
+                flist.append(list(self.features_int(name).values()))
+        return flist
+
+    def csv2gender_list(self, path, *args, **kwargs):
+        # generating a list of 0, 1, 2 as females, males and unknows
+        # TODO: ISO/IEC 5218 proposes a norm about coding gender:
+        # ``0 as not know'',``1 as male'', ``2 as female''
+        # and ``9 as not applicable''
+        header = kwargs.get("header", True)
+        gender_column = kwargs.get("gender_column", 4)
+        gender_f_chars = kwargs.get("gender_f_chars", "f")
+        gender_m_chars = kwargs.get("gender_m_chars", "m")
+        delimiter = kwargs.get("delimiter", ",")
+        glist = []
+        with open(path) as csvfile:
+            sexreader = csv.reader(csvfile, delimiter=delimiter, quotechar='"')
+            if header:
+                next(sexreader, None)
+            count_females = 0
+            count_males = 0
+            count_unknown = 0
+            gender = ""
+            for row in sexreader:
+                try:
+                    gender = row[gender_column]
+                except IndexError:
+                    print(
+                        "The method csv2gender_list has not row[%s]"
+                        % str(gender_column)
+                    )
+                    print("To review that gender row is set in the input")
+                    # os.kill(os.getpid(), signal.SIGUSR1)
+                if gender == gender_f_chars:
+                    g = 0
+                    count_females = count_females + 1
+                elif gender == gender_m_chars:
+                    g = 1
+                    count_males = count_males + 1
+                else:
+                    g = 2
+                    count_unknown = count_unknown + 1
+                glist.append(g)
+        self.females = count_females
+        self.males = count_males
+        self.unknown = count_unknown
+        return glist
 
     def svc(self):
         # Scikit svc classifier
