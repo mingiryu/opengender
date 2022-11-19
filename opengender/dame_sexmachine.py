@@ -14,37 +14,39 @@ from opengender.utils import force_whitespaces, drop_accents, drop_dots
 csv.field_size_limit(3000000)
 
 
+def features_int(name):
+    # features method created to check the scikit classifiers
+    features = {}
+    features["first_letter"] = ord(name[0].lower())
+    features["last_letter"] = ord(name[-1].lower())
+    for letter in "abcdefghijklmnopqrstuvwxyz":
+        n = name.lower().count(letter)
+        features["count({})".format(letter)] = n
+    features["vocals"] = 0
+    for letter in "aeiou":
+        features["vocals"] = features["vocals"] + 1
+    features["consonants"] = 0
+    for letter in "bcdfghjklmnpqrstvwxyz":
+        features["consonants"] = features["consonants"] + 1
+    if chr(features["first_letter"]) in "aeiou":
+        features["first_letter_vocal"] = 1
+    else:
+        features["first_letter_vocal"] = 0
+    if chr(features["last_letter"]) in "aeiou":
+        features["last_letter_vocal"] = 1
+    else:
+        features["last_letter_vocal"] = 0
+    # h = hyphen.Hyphenator('en_US')
+    # features["syllables"] = len(h.syllables(name))
+    if ord(name[-1].lower()) == "a":
+        features["last_letter_a"] = 1
+    else:
+        features["last_letter_a"] = 0
+    return features
+
+
 class DameSexmachine:
 
-    def features_int(self, name):
-        # features method created to check the scikit classifiers
-        features_int = {}
-        features_int["first_letter"] = ord(name[0].lower())
-        features_int["last_letter"] = ord(name[-1].lower())
-        for letter in "abcdefghijklmnopqrstuvwxyz":
-            n = name.lower().count(letter)
-            features_int["count({})".format(letter)] = n
-        features_int["vocals"] = 0
-        for letter in "aeiou":
-            features_int["vocals"] = features_int["vocals"] + 1
-        features_int["consonants"] = 0
-        for letter in "bcdfghjklmnpqrstvwxyz":
-            features_int["consonants"] = features_int["consonants"] + 1
-        if chr(features_int["first_letter"]) in "aeiou":
-            features_int["first_letter_vocal"] = 1
-        else:
-            features_int["first_letter_vocal"] = 0
-        if chr(features_int["last_letter"]) in "aeiou":
-            features_int["last_letter_vocal"] = 1
-        else:
-            features_int["last_letter_vocal"] = 0
-        # h = hyphen.Hyphenator('en_US')
-        # features_int["syllables"] = len(h.syllables(name))
-        if ord(name[-1].lower()) == "a":
-            features_int["last_letter_a"] = 1
-        else:
-            features_int["last_letter_a"] = 0
-        return features_int
 
     def features_list(self, path=ALL_PATH):
         flist = []
@@ -54,7 +56,7 @@ class DameSexmachine:
             for row in sexreader:
                 name = row[0].title()
                 name = name.replace('"', "")
-                flist.append(list(self.features_int(name).values()))
+                flist.append(list(features_int(name).values()))
         return flist
 
     def csv2gender_list(self, path, *args, **kwargs):
@@ -138,9 +140,9 @@ class DameSexmachine:
         # and ``9 as not applicable''
         guess = 2
 
-        vector = self.features_int(name)
+        vector = features_int(name)
         if (guess == "unknown") | (guess == 2):
-            vector = list(self.features_int(name).values())
+            vector = list(features_int(name).values())
             if ml == "svc":
                 m = self.svc_load()
                 predicted = m.predict([vector])

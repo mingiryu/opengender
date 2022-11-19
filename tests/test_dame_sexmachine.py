@@ -3,7 +3,7 @@ import numpy as np
 import os.path
 import collections
 
-from opengender.dame_sexmachine import DameSexmachine
+from opengender.dame_sexmachine import DameSexmachine, features_int
 from opengender.paths import DATA_DIR, ALL_PATH, PARTIAL_PATH
 
 
@@ -11,30 +11,10 @@ collections.Callable = collections.abc.Callable
 
 
 class TddInPythonExample(unittest.TestCase):
-    def test_dame_sexmachine_features_int(self):
-        s = DameSexmachine()
-        f = s.features_int("David")
-        self.assertTrue(len(f) > 0)
-
-    def test_dame_sexmachine_guess(self):
-        s = DameSexmachine()
-        self.assertEqual(s.guess("David"), "male")
-        self.assertEqual(s.guess("Laura"), "female")
-        self.assertEqual(s.guess("David", binary=True), 1)
-        self.assertEqual(s.guess("Laura", binary=True), 0)
-        self.assertEqual(s.guess("David", binary=True, ml="svc"), 1)
-        self.assertEqual(s.guess("Laura", binary=True, ml="svc"), 0)
-        self.assertEqual(s.guess("Palabra", binary=True, ml="svc"), 1)
-        self.assertEqual(s.guess("Nadiccionaria", binary=True), 0)
-        self.assertEqual(s.guess("Nadiccionaria"), "female")
-        #        With accents:
-        self.assertEqual(s.guess("Inés"), "female")
-        #        Without accents:
-        self.assertEqual(s.guess("Ines"), "female")
 
     def test_sexmachine_features_int(self):
         s = DameSexmachine()
-        dicc = s.features_int("David")
+        dicc = features_int("David")
         self.assertEqual(chr(dicc["last_letter"]), "d")
         self.assertEqual(chr(dicc["first_letter"]), "d")
         self.assertEqual(dicc["count(a)"], 1)
@@ -52,6 +32,22 @@ class TddInPythonExample(unittest.TestCase):
         self.assertEqual(dicc["first_letter_vocal"], 0)
         self.assertEqual(dicc["last_letter_vocal"], 0)
         self.assertTrue(len(dicc.values()) > 30)
+    
+    def test_dame_sexmachine_guess(self):
+        s = DameSexmachine()
+        self.assertEqual(s.guess("David"), "male")
+        self.assertEqual(s.guess("Laura"), "female")
+        self.assertEqual(s.guess("David", binary=True), 1)
+        self.assertEqual(s.guess("Laura", binary=True), 0)
+        self.assertEqual(s.guess("David", binary=True, ml="svc"), 1)
+        self.assertEqual(s.guess("Laura", binary=True, ml="svc"), 0)
+        self.assertEqual(s.guess("Palabra", binary=True, ml="svc"), 1)
+        self.assertEqual(s.guess("Nadiccionaria", binary=True), 0)
+        self.assertEqual(s.guess("Nadiccionaria"), "female")
+        #        With accents:
+        self.assertEqual(s.guess("Inés"), "female")
+        #        Without accents:
+        self.assertEqual(s.guess("Ines"), "female")
 
     def test_dame_gender_csv2gender_list(self):
         s = DameSexmachine()
