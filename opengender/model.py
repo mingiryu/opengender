@@ -4,7 +4,8 @@ import pickle
 from typing import Optional
 from tqdm import tqdm
 
-from opengender.paths import INTERALL_PATH
+from opengender.train import features_int
+from opengender.paths import DATA_DIR, INTERALL_PATH
 
 
 class Retriever:
@@ -25,10 +26,10 @@ class Retriever:
 
         return cls(df)
 
-    def normalize(self, text: Optional[str]):
-        if text:
-            # XXX: Add comprehensive text normalization
-            return text.upper()
+    def normalize(self, name: Optional[str]):
+        if name:
+            # XXX: Add comprehensive normalization
+            return name.upper()
 
     def predict(self, name: Optional[str]):
         """Look up gender and probability of a known name"""
@@ -48,13 +49,8 @@ class Classifier:
             model = pickle.load(fh)
             return cls(model)
 
-    def normalize(self, text: Optional[str]):
-        if text:
-            # XXX: Add comprehensive text normalization
-            return text.upper()
-
     def predict(self, name: Optional[str]):
-        if name := self.normalize(name):
-            return self.model.predict(name)
+        if name:
+            return self.model.predict_proba([features_int(name)])
         else:
             return dict(gender="unknown", proba=1.0)
