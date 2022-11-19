@@ -8,6 +8,7 @@ from sklearn.datasets import make_classification
 from sklearn import svm
 
 from opengender.paths import DATA_DIR, ALL_PATH, PARTIAL_PATH
+from opengender.utils import force_whitespaces, drop_accents, drop_dots
 
 
 csv.field_size_limit(3000000)
