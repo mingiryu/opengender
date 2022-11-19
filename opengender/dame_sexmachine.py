@@ -45,20 +45,19 @@ def features_int(name):
     return features
 
 
+def features_list(path=ALL_PATH):
+    flist = []
+    with open(path) as csvfile:
+        sexreader = csv.reader(csvfile, delimiter=",", quotechar="|")
+        next(sexreader, None)
+        for row in sexreader:
+            name = row[0].title()
+            name = name.replace('"', "")
+            flist.append(list(features_int(name).values()))
+    return flist
+
+
 class DameSexmachine:
-
-
-    def features_list(self, path=ALL_PATH):
-        flist = []
-        with open(path) as csvfile:
-            sexreader = csv.reader(csvfile, delimiter=",", quotechar="|")
-            next(sexreader, None)
-            for row in sexreader:
-                name = row[0].title()
-                name = name.replace('"', "")
-                flist.append(list(features_int(name).values()))
-        return flist
-
     def csv2gender_list(self, path, *args, **kwargs):
         # generating a list of 0, 1, 2 as females, males and unknows
         # TODO: ISO/IEC 5218 proposes a norm about coding gender:
@@ -95,7 +94,7 @@ class DameSexmachine:
 
     def svc(self):
         # Scikit svc classifier
-        X = np.array(self.features_list(path=ALL_PATH))
+        X = np.array(features_list(path=ALL_PATH))
         y = self.csv2gender_list(path=ALL_PATH)
         clf = svm.SVC()
         clf.fit(X, y)
@@ -111,7 +110,7 @@ class DameSexmachine:
 
     def forest(self):
         # Scikit forest classifier
-        X = np.array(self.features_list(path=ALL_PATH))
+        X = np.array(features_list(path=ALL_PATH))
         y = np.array(self.csv2gender_list(path=ALL_PATH))
         X, y = make_classification(
             n_samples=7000,
