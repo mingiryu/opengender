@@ -87,14 +87,13 @@ class DameSexmachine(Gender):
         pkl_file.close()
         return clf
 
-    def guess(self, name, binary=False, ml="svc", *args, **kwargs):
+    def guess(self, name, binary=False, ml="svc"):
         # guess method to check names dictionary and nltk classifier
         # TODO: ISO/IEC 5218 proposes a norm about coding gender:
         # ``0 as not know'',``1 as male'', ``2 as female''
         # and ``9 as not applicable''
-        dataset = kwargs.get("dataset", "inter")
         guess = 2
-        guess = super().guess(name, binary, dataset)
+
         vector = self.features_int(name)
         if (guess == "unknown") | (guess == 2):
             vector = list(self.features_int(name).values())
