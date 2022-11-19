@@ -1,14 +1,7 @@
 import csv
-import numpy as np
 import pickle
 
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.datasets import make_classification
-
-from sklearn import svm
-
 from opengender.paths import DATA_DIR, ALL_PATH
-from opengender.utils import force_whitespaces, drop_accents, drop_dots
 
 
 csv.field_size_limit(3000000)
@@ -74,10 +67,7 @@ def csv2gender_list(path):
             try:
                 gender = row[gender_column]
             except IndexError:
-                print(
-                    "The method csv2gender_list has not row[%s]"
-                    % str(gender_column)
-                )
+                print("The method csv2gender_list has not row[%s]" % str(gender_column))
                 print("To review that gender row is set in the input")
                 # os.kill(os.getpid(), signal.SIGUSR1)
             if gender == gender_f_chars:
@@ -91,39 +81,11 @@ def csv2gender_list(path):
     return glist
 
 
-def svc():
-    X = np.array(features_list(path=ALL_PATH))
-    y = csv2gender_list(path=ALL_PATH)
-    clf = svm.SVC()
-    clf.fit(X, y)
-    filename = DATA_DIR / "svc_model.sav"
-    pickle.dump(clf, open(filename, "wb"))
-    return clf
-
-
 def svc_load():
     pkl_file = open(DATA_DIR / "svc_model.sav", "rb")
     clf = pickle.load(pkl_file)
     pkl_file.close()
     return clf
-
-
-def forest():
-    X = np.array(features_list(path=ALL_PATH))
-    y = np.array(csv2gender_list(path=ALL_PATH))
-    X, y = make_classification(
-        n_samples=7000,
-        n_features=33,
-        n_informative=33,
-        n_redundant=0,
-        random_state=0,
-        shuffle=False,
-    )
-    rf = RandomForestRegressor(n_estimators=20, random_state=0)
-    rf.fit(X, y)
-    filename = DATA_DIR / "forest_model.sav"
-    pickle.dump(rf, open(filename, "wb"))
-    return rf
 
 
 def forest_load():
