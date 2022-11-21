@@ -5,7 +5,7 @@ from opengender.model import Retriever
 
 @pytest.fixture(scope="package")
 def retriever():
-    yield Retriever.load_model()
+    yield Retriever.load()
 
 
 @pytest.mark.parametrize(
