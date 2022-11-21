@@ -13,7 +13,7 @@ class Retriever:
         self.df: pd.DataFrame = df
 
     @classmethod
-    def load_model(cls, path: str = INTERALL_PATH):
+    def load(cls, path: str = INTERALL_PATH):
         df = pd.read_csv(path)
         df = df.set_index("name")
         df = df.drop("count", axis=1)
@@ -44,7 +44,7 @@ class Classifier:
         self.model = model
 
     @classmethod
-    def load_model(cls, path: str):
+    def load(cls, path: str):
         with open(path, "rb") as fh:
             model = pickle.load(fh)
             return cls(model)
