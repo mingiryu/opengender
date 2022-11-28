@@ -4,8 +4,7 @@ import pickle
 from typing import Optional
 from tqdm import tqdm
 
-from opengender.train import features_int
-from opengender.paths import DATA_DIR, INTERALL_PATH
+from opengender.paths import INTERALL_PATH, CLF_PATH
 
 
 class Retriever:
@@ -42,15 +41,37 @@ class Retriever:
 class Classifier:
     def __init__(self, model):
         self.model = model
+        self.classes = model.classes_
 
     @classmethod
-    def load(cls, path: str):
+    def load(cls, path: str = CLF_PATH):
         with open(path, "rb") as fh:
             model = pickle.load(fh)
             return cls(model)
 
     def predict(self, name: Optional[str]):
         if name:
-            return self.model.predict_proba([features_int(name)])
+            result = self.model.predict_proba([name])[0]
+            return dict(zip(self.classes, result))
         else:
             return dict(gender="unknown", proba=1.0)
+
+
+class OpenGender:
+    def __init__(self, retriever, model):
+        self.retriever = retriever
+        self.model = model
+
+    @classmethod
+    def load(cls):
+        retriever = Retriever.load()
+        model = Classifier.load()
+        return cls(retriever, model)
+
+    def predict(self, name: Optional[str]):
+        result = self.retriever.predict(name)
+
+        if result["gender"] == "unknown":
+            result = self.model.predict(name)
+
+        return result
