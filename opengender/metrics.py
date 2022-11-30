@@ -2,7 +2,7 @@ from sklearn.metrics import confusion_matrix
 
 
 def components(y_true, y_pred):
-    M = confusion_matrix(y_true, y_pred, ["male", "female", "unknown"])
+    M = confusion_matrix(y_true, y_pred, labels=["male", "female", "unknown"])
     mm = M[0][0]
     mf = M[0][1]
     mu = M[0][2]
