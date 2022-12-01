@@ -8,6 +8,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import HalvingRandomSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC, LinearSVC
+from sklearn.ensemble import RandomForestClassifier
 
 from opengender import metrics
 from opengender.paths import CLF_PATH
@@ -31,7 +32,7 @@ def main():
         # max_features=10_000,
         ngram_range=(1, 4),
     )
-    clf = LinearSVC(
+    clf = RandomForestClassifier(
         # kernel="linear",
         # C=10,
         # probability=True,

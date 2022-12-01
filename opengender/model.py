@@ -51,7 +51,7 @@ class Classifier:
 
     def predict(self, name: Optional[str]):
         if name:
-            result = self.model.predict_proba([name])[0]
+            result = self.model.decision_function([name])[0]
             return dict(zip(self.classes, result))
         else:
             return dict(gender="unknown", proba=1.0)
