@@ -27,6 +27,6 @@ def na_coded(y_true, y_pred):
     return (mu + fu) / (mm + fm + mf + ff + mu + fu)
 
 
-def errror_gender_bias(y_true, y_pred):
+def error_gender_bias(y_true, y_pred):
     mm, mf, mu, fm, ff, fu = components(y_true, y_pred)
     return (mf - fm) / (mm + fm + mf + ff)
