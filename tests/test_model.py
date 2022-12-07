@@ -1,25 +1,25 @@
 import pytest
 
-from opengender.model import Retriever
+from opengender import OpenGender
 
 
 @pytest.fixture(scope="package")
-def retriever():
-    yield Retriever.load()
+def gender():
+    yield OpenGender()
 
 
 @pytest.mark.parametrize(
     "test,expect",
     [
         # Sanity checks
-        ("David", {"gender": "male", "proba": 0.9973847215987144}),
-        ("Mary", {"gender": "female", "proba": 0.996117197103305}),
+        ("David", {"gender": "m", "proba": 0.9446712224321301}),
+        ("Mary", {"gender": "f", "proba": 0.9830306722011564}),
         # Unknown name
-        ("Mingi", {"gender": "unknown", "proba": 1.0}),
+        ("Mingi", {"gender": "m", "proba": 0.837469101587949}),
         # Invalid inputs
-        ("", {"gender": "unknown", "proba": 1.0}),
-        (None, {"gender": "unknown", "proba": 1.0}),
+        ("", {"gender": "u", "proba": 1.0}),
+        (None, {"gender": "u", "proba": 1.0}),
     ],
 )
-def test_retriver_predict(retriever, test, expect):
-    assert retriever.predict(test) == expect
+def test_model(gender, test, expect):
+    assert gender(test) == expect
