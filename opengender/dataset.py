@@ -15,6 +15,7 @@ def load_wiki_gendersort():
     df["y"] = df.gender.str.lower().str[0]
 
     df = df[df.y != "u"]
+    df = df[df.y != "i"]
 
     return df
 
