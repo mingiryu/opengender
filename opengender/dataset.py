@@ -16,7 +16,7 @@ def load_wiki_gendersort():
 
     df = df[df.y != "u"]
 
-    return df[['X', 'y']]
+    return df
 
 
 def load_name_gender_inference():
@@ -31,7 +31,7 @@ def load_name_gender_inference():
 
     df = df[df.y != "u"]
 
-    return df[['X', 'y']]
+    return df
 
 
 def load_damegender():
@@ -47,4 +47,4 @@ def load_damegender():
 
     df = df[df.y != "u"]
 
-    return df[['X', 'y']]
+    return df

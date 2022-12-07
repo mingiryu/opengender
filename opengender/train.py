@@ -19,8 +19,11 @@ RANDOM_STATE = 7
 
 
 def main():
-    train = pd.concat([load_damegender(), load_wiki_gendersort()])
-    test = load_name_gender_inference()
+    dame = load_damegender()[['X', 'y']]
+    wiki = load_wiki_gendersort()[['X', 'y']]
+
+    train = pd.concat([dame, wiki])
+    test = load_name_gender_inference()[['X', 'y']]
 
     # Make sure test data is unseen during training
     train = train[~train.X.isin(test.X)]
