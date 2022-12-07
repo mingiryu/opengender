@@ -1,41 +1,39 @@
-import pandas as pd
 import pickle
 
-from typing import Optional
 from tqdm import tqdm
+from typing import Optional
 
-from opengender.paths import INTERALL_PATH, CLF_PATH
+from opengender.dataset import load_damegender
+from opengender.paths import CLF_PATH
 
 
 class Retriever:
-    def __init__(self, df: pd.DataFrame):
-        self.df: pd.DataFrame = df
-
-    @classmethod
-    def load(cls, path: str = INTERALL_PATH):
-        df = pd.read_csv(path)
+    def __init__(self):
+        df = load_damegender()
         df = df.set_index("name")
         df = df.drop("count", axis=1)
 
         tqdm.pandas()
+        df = df.rename(columns={'male': 'm', 'female': 'f'})
+        df['name'] = df.name.str.lower()
         df["dict"] = df.progress_apply(lambda x: x.to_dict(), axis=1)
         df["gender"] = df.progress_apply(lambda x: max(x.dict, key=x.dict.get), axis=1)
         df["proba"] = df.progress_apply(lambda x: x.dict[x.gender] / 100, axis=1)
-        df = df.drop(columns=["male", "female", "dict"])
+        df = df.drop(columns=["m", "f", "dict"])
 
-        return cls(df)
+        self.df = df
 
     def normalize(self, name: Optional[str]):
         if name:
             # XXX: Add comprehensive normalization
-            return name.upper()
+            return name.lower()
 
     def predict(self, name: Optional[str]):
         """Look up gender and probability of a known name"""
         try:
             return self.df.loc[self.normalize(name)].to_dict()
         except KeyError:
-            return dict(gender="unknown", proba=1.0)
+            return dict(gender="u", proba=1.0)
 
 
 class Classifier:
@@ -54,7 +52,7 @@ class Classifier:
             result = self.model.decision_function([name])[0]
             return dict(zip(self.classes, result))
         else:
-            return dict(gender="unknown", proba=1.0)
+            return dict(gender="u", proba=1.0)
 
 
 class OpenGender:
@@ -71,7 +69,7 @@ class OpenGender:
     def predict(self, name: Optional[str]):
         result = self.retriever.predict(name)
 
-        if result["gender"] == "unknown":
+        if result["gender"] == "u":
             result = self.model.predict(name)
 
         return result

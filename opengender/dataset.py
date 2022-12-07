@@ -1,7 +1,7 @@
 from datasets import load_dataset
 
 
-SEED = 42
+SEED = 7
 
 
 def load_wiki_gendersort():
@@ -9,11 +9,14 @@ def load_wiki_gendersort():
     dataset = dataset.shuffle(seed=SEED)
 
     df = dataset["train"].to_pandas()
+    df = df[df.name.notna()]
 
     df["X"] = df.name.str.lower()
     df["y"] = df.gender.str.lower().str[0]
 
-    return df.dropna()
+    df = df[df.y != "u"]
+
+    return df[['X', 'y']]
 
 
 def load_name_gender_inference():
@@ -21,11 +24,14 @@ def load_name_gender_inference():
     dataset = dataset.shuffle(seed=SEED)
 
     df = dataset["train"].to_pandas()
-
+    df = df[df.first_name.notna()]
+    
     df["X"] = df.first_name
     df["y"] = df.gender
 
-    return df.dropna()
+    df = df[df.y != "u"]
+
+    return df[['X', 'y']]
 
 
 def load_damegender():
@@ -33,9 +39,12 @@ def load_damegender():
     dataset = dataset.shuffle(seed=SEED)
 
     df = dataset["train"].to_pandas()
+    df = df[df.name.notna()]
 
     df["X"] = df.name.str.lower()
     df["y"] = df.apply(lambda row: "m" if row.male > row.female else "f", axis=1)
     df["y"] = df.apply(lambda row: "u" if row.male == row.female else row.y, axis=1)
 
-    return df.dropna()
+    df = df[df.y != "u"]
+
+    return df[['X', 'y']]
